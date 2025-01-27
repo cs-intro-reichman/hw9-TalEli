@@ -2776,6 +2776,7 @@ public class TestHandler {
         String actual = "";
         try {
             memorySpace.defrag();
+
             actual += (memorySpace.toString().equals(expectedText));
         } catch (Exception e) {
             actual = TesterMessagesEnum.ERROR + e.getMessage();

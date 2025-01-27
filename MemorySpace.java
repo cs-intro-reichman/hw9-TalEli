@@ -139,6 +139,7 @@ public class MemorySpace {
 		boolean swapped = true; 
 		while (swapped)
 		{
+			swapped=false;
 			Node current = freeList.getFirst();
 			while (current != null && current.next != null)
 			{
