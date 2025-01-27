@@ -39,4 +39,21 @@ public class MemoryBlock {
 	public String toString() {
 		return "(" + baseAddress + " , " + length +")";
 	}
+
+	public int getLength()
+	{
+		return this.length;
+	}
+
+	public int getBaseAddress(){
+		return this.baseAddress;
+	}
+
+	public void setBaseAddress (int base){
+		this.baseAddress = base;
+	}
+
+	public void setLength(int l){
+		this.length = l;
+	}
 }

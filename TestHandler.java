@@ -2507,7 +2507,9 @@ public class TestHandler {
         String expected = "true";
         String actual = "";
         try {
+
             int address = memorySpace.malloc(20);
+
             actual += (address == 0 && memorySpace.toString().equals(expectedText));
             
         } catch (Exception e) {

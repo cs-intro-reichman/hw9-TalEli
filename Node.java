@@ -15,13 +15,20 @@ public class Node {
 	public Node(MemoryBlock block) {
 		this.block = block;
 	}
+
+	public MemoryBlock getBlock(){
+		return this.block;
+	}
 	
+	public void setNext (Node next){
+		this.next = next;
+	}
 	/**
 	 * A textual representation of this node, for debugging.
 	 * The node's contents, which is a memory block, appears within
 	 * curly brackets. For example: {(208,10)}. 
 	 */
 	public String toString() {
-		return "{" + block + "}";
+		return this.block + " ";
 	}
 }

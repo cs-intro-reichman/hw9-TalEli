@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /**
  * Represents a managed memory space. The memory space manages a list of allocated 
  * memory blocks, and a list free memory blocks. The methods "malloc" and "free" are 
@@ -58,7 +60,33 @@ public class MemorySpace {
 	 * @return the base address of the allocated block, or -1 if unable to allocate
 	 */
 	public int malloc(int length) {		
-		//// Replace the following statement with your code
+	
+		if (length < 0){
+			return -1;
+		}
+		Node current = freeList.getFirst();
+        while (current != null)
+		{
+			MemoryBlock freeBlock = current.getBlock();
+			if (freeBlock.getLength() >= length)
+			{
+				int baseAddress = freeBlock.getBaseAddress();
+				MemoryBlock allocatedBlock = new MemoryBlock(baseAddress, length);
+				allocatedList.addLast(allocatedBlock);
+			
+				if (freeBlock.getLength() == length)
+				{
+					freeList.remove(current);
+				}
+				else{
+					freeBlock.setBaseAddress(freeBlock.baseAddress + length);
+					freeBlock.setLength(freeBlock.getLength() - length);
+				}
+				return baseAddress;
+			}
+			current = current.next;
+		}
+
 		return -1;
 	}
 
@@ -71,7 +99,23 @@ public class MemorySpace {
 	 *            the starting address of the block to freeList
 	 */
 	public void free(int address) {
-		//// Write your code here
+		if (allocatedList.getSize() == 0) {
+			throw new IllegalArgumentException("index must be between 0 and size");
+		}
+
+		Node current = allocatedList.getFirst();
+		while (current != null)
+		{
+			MemoryBlock allocatedBlock = current.getBlock();
+			if (allocatedBlock.getBaseAddress() == address){
+				allocatedList.remove(current);
+				freeList.addLast(allocatedBlock);
+				return;
+			}
+
+			current = current.next;
+		}
+		
 	}
 	
 	/**
@@ -88,7 +132,42 @@ public class MemorySpace {
 	 * In this implementation Malloc does not call defrag.
 	 */
 	public void defrag() {
-		/// TODO: Implement defrag test
-		//// Write your code here
+		if (freeList.getSize() <= 1)
+		{
+			return;
+		}
+		boolean swapped = true; 
+		while (swapped)
+		{
+			Node current = freeList.getFirst();
+			while (current != null && current.next != null)
+			{
+				MemoryBlock block1 = current.getBlock();
+				MemoryBlock block2 = current.next.getBlock();
+				if (block1.getBaseAddress() > block2.getBaseAddress())
+				{
+					MemoryBlock temp = block1; 
+					current.block = block2;
+					current.next.block = temp; 
+					swapped = true; 
+				}
+				current = current.next;
+			}
+		}
+		Node current = freeList.getFirst();
+		while (current != null && current.next != null)
+		{
+			MemoryBlock block1 = current.getBlock();
+			MemoryBlock block2 = current.next.getBlock();
+			if(block1.getBaseAddress() + block1.getLength() == block2.getBaseAddress())
+			{
+				block1.setLength(block1.getLength() + block2.getLength());
+				freeList.remove(current.next);
+			}
+			else 
+			{
+				current = current.next;
+			}
+		}
 	}
 }
